@@ -1,0 +1,9 @@
+htop
+tcpdump
+pwgen
+ncdu
+fail2ban
+iptables
+iptables-persistent
+git
+openssh-server

@@ -1,0 +1,38 @@
+version: '2.4'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d:ro
+      - ./certbot/www:/var/www/certbot:ro
+      - ./certbot/conf:/etc/nginx/ssl:ro
+    networks:
+      reverse-proxy-network:
+        ipv4_address: 172.25.0.2
+        ipv6_address: 2001:3990:3990::2
+
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www:/var/www/certbot:rw
+      - ./certbot/conf:/etc/letsencrypt:rw
+    depends_on:
+      - nginx
+
+networks:
+  reverse-proxy-network:
+    name: reverse-proxy-network
+    enable_ipv6: true
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+        - subnet: 2001:3990:3990::/64
+          gateway: 2001:3990:3990::1
+
