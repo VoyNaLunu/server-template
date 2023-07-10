@@ -7,3 +7,4 @@ iptables
 iptables-persistent
 git
 openssh-server
+rsync
