@@ -4,7 +4,7 @@ then
     echo "swap file already exists" && exit 0
 fi
 
-fallocate -l 2G /swapfile
+fallocate -l $1 /swapfile
 chmod 600 /swapfile
 mkswap /swapfile
 swapon /swapfile
