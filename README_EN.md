@@ -54,7 +54,7 @@ sudo iptables-restore < /etc/iptables/rules.v4
 
 1. Add a symlink to custom fail2ban config
 ```bash
-ln -s /path/to/repo/fail2ban/custom.conf /etc/fail2ban/jail.d/custom.conf
+ln -s /path/to/repo/fail2ban/jail.d/custom.conf /etc/fail2ban/jail.d/custom.conf
 ```
 2. Restart fail2ban
 ```bash
