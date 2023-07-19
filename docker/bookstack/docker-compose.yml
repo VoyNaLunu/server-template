@@ -1,0 +1,37 @@
+version: '2'
+services:
+  bookstack-mysql:
+    image: mysql:8.0
+    env_file:
+      ./.env
+    restart: unless-stopped
+    volumes:
+    - mysql-data:/var/lib/mysql
+    networks:
+      reverse-proxy-network:
+        aliases:
+          - bookstack-mysql
+
+  bookstack:
+    image: solidnerd/bookstack:23.5.1
+    depends_on:
+    - bookstack-mysql
+    restart: unless-stopped
+    env_file:
+      ./.env
+    volumes:
+    - uploads:/var/www/bookstack/public/uploads
+    - storage-uploads:/var/www/bookstack/storage/uploads
+    networks:
+      reverse-proxy-network:
+        aliases:
+          - bookstack
+
+  
+networks:
+  reverse-proxy-network:
+    external: true
+volumes:
+  mysql-data:
+  uploads:
+  storage-uploads:
