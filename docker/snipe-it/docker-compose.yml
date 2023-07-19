@@ -1,0 +1,44 @@
+version: '3'
+services:
+  mysql:
+    env_file:
+      - ./.env
+    image: mysql:5.6
+    restart: unless-stopped
+    volumes:
+      - snipeit-sql-vol:/var/lib/mysql
+    networks:
+      reverse-proxy-network:
+        aliases:
+          - snipeit-mysql
+  snipeit:
+    env_file:
+      - ./.env
+    image: snipe/snipe-it:v6.1.2
+    restart: unless-stopped
+    volumes:
+      - snipeit-vol:/var/lib/snipeit
+      - ./ru:/var/www/html/resources/lang/ru #Исправил большую часть русской локализации
+      #в документации Snipe-IT https://snipe-it.readme.io/docs/reverse-proxies требуется подключение типа
+      # Клиент <= HTTP => Реверс Прокси <= HTTP => Snipe-IT
+      # или
+      # Клиент <= HTTPS => Реверс Прокси <= HTTPS => Snipe-IT
+      # 
+      # Клиент <= HTTPS => Реверс Прокси <= HTTP => Snipe-IT работать не будет, поэтому прокидываем сертификаты от реверс прокси контейнеру:
+      - /root/server-template/reverse-proxy/certbot/conf/live/snipeit.example.com/fullchain.pem:/var/lib/snipeit/ssl/snipeit-ssl.crt
+      - /root/server-template/reverse-proxy/certbot/conf/live/snipeit.example.com/privkey.pem:/var/lib/snipeit/ssl/snipeit-ssl.key
+    networks:
+      reverse-proxy-network:
+        aliases:
+          - snipeit
+    depends_on:
+      - mysql
+
+networks:
+  reverse-proxy-network:
+     name: reverse-proxy-network
+     external: true
+
+volumes:
+  snipeit-sql-vol:
+  snipeit-vol:
