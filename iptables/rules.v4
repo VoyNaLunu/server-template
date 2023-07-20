@@ -1,28 +1,36 @@
+#Restore using command 'iptables-restore -n /etc/iptables/rules.v4'
+
 *filter
 :INPUT DROP [0:0]
-:FORWARD ACCEPT [0:0]
+:FORWARD DROP [0:0]
 :OUTPUT ACCEPT [0:0]
+#If you need to add rules which load before Docker’s rules, add them to the DOCKER-USER chain,
+#more about that: https://docs.docker.com/network/packet-filtering-firewalls/
+#:DOCKER-USER - [0:0]
 
+#By default iptables-restore flushes all rules including Docker rules
+#option -n is used to avoid that but before applying rules chain needs to be flushed
+-F INPUT
 
-#allow ping
--A INPUT -p icmp -j ACCEPT
+#Uncomment below if using DOCKER-USER chain
+#-F DOCKER-USER
 
-#allow localhost connections
+#Allow ping
+-A INPUT -p icmp --icmp-type any -j ACCEPT
+
+#Allow localhost connections
 -A INPUT -i lo -j ACCEPT
 
-#allow SSH
+#Allow SSH
 -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
 
-#Docker has own chain that is applied before these rules but im going to leave them just in case
-#allow HTTP
--A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
-#allow HTTPS
--A INPUT -p tcp -m tcp --dport 443 -j ACCEPT
-#allow Wireguard
-#-A INPUT -p udp -m udp --dport 18200 -j ACCEPT
-
-#additional rules
--A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+#Additional rules
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -m conntrack --ctstate INVALID -j DROP
+
+#DOCKER-USER example
+#-A DOCKER-USER -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+#-A DOCKER-USER -p tcp -m tcp -m conntrack --ctorigdstport 80 -j ACCEPT
+#-A DOCKER-USER -p tcp -m tcp -m conntrack --ctorigdstport 25 -j DROP
 
 COMMIT

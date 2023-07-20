@@ -47,7 +47,7 @@ ln -s /path/to/repo/iptables/rules.v4 /etc/iptables/rules.v4
 ```
 2. Загрузить добавленные правила
 ```bash
-sudo iptables-restore < /etc/iptables/rules.v4
+sudo iptables-restore -n /etc/iptables/rules.v4
 ```
 
 ### Fail2Ban
