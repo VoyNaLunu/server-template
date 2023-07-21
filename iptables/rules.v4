@@ -5,7 +5,7 @@
 :FORWARD DROP [0:0]
 :OUTPUT ACCEPT [0:0]
 #If you need to add rules which load before Docker’s rules, add them to the DOCKER-USER chain,
-#more about that: https://docs.docker.com/network/packet-filtering-firewalls/
+#more about that: https://docs.docker.com/network/packet-filtering-firewalls/ and https://unrouted.io/2017/08/15/docker-firewall/
 #:DOCKER-USER - [0:0]
 
 #By default iptables-restore flushes all rules including Docker rules
