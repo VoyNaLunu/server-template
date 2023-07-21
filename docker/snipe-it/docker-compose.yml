@@ -18,15 +18,22 @@ services:
     restart: unless-stopped
     volumes:
       - snipeit-vol:/var/lib/snipeit
-      - ./ru:/var/www/html/resources/lang/ru #Исправил большую часть русской локализации
-      #в документации Snipe-IT https://snipe-it.readme.io/docs/reverse-proxies требуется подключение типа
-      # Клиент <= HTTP => Реверс Прокси <= HTTP => Snipe-IT
-      # или
-      # Клиент <= HTTPS => Реверс Прокси <= HTTPS => Snipe-IT
+      #--------------------------------------------------------
+      #RU localization mostly fixed, optional
+      - ./ru:/var/www/html/resources/lang/ru
+      #--------------------------------------------------------
+      #GOOD:
+      # Client <= HTTP => Reverse Proxy <= HTTP => Snipe-IT
+      # or
+      # Client <= HTTPS => Reverse Proxy <= HTTPS => Snipe-IT
       # 
-      # Клиент <= HTTPS => Реверс Прокси <= HTTP => Snipe-IT работать не будет, поэтому прокидываем сертификаты от реверс прокси контейнеру:
+      #BAD:
+      # Client <= HTTPS => Reverse Proxy <= HTTP => Snipe-IT
+      #source: https://snipe-it.readme.io/docs/reverse-proxies
+      #so ceritifcate and key are required for Snipe-IT ssl to work:
       - /root/server-template/reverse-proxy/certbot/conf/live/snipeit.example.com/fullchain.pem:/var/lib/snipeit/ssl/snipeit-ssl.crt
       - /root/server-template/reverse-proxy/certbot/conf/live/snipeit.example.com/privkey.pem:/var/lib/snipeit/ssl/snipeit-ssl.key
+      #--------------------------------------------------------
     networks:
       reverse-proxy-network:
         aliases:
