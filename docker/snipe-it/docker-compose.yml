@@ -30,9 +30,8 @@ services:
       #BAD:
       # Client <= HTTPS => Reverse Proxy <= HTTP => Snipe-IT
       #source: https://snipe-it.readme.io/docs/reverse-proxies
-      #so ceritifcate and key are required for Snipe-IT ssl to work:
-      - /root/server-template/reverse-proxy/certbot/conf/live/snipeit.example.com/fullchain.pem:/var/lib/snipeit/ssl/snipeit-ssl.crt
-      - /root/server-template/reverse-proxy/certbot/conf/live/snipeit.example.com/privkey.pem:/var/lib/snipeit/ssl/snipeit-ssl.key
+      #so ceritifcate and key must be copied into following directory:
+      - ./ssl:/var/lib/snipeit/ssl
       #--------------------------------------------------------
     networks:
       reverse-proxy-network:
