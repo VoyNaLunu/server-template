@@ -1,11 +1,12 @@
 #!/bin/bash
-if [ -f /swapfile ]
+#Usage: add_swap.sh /path/to/swapfile 2G
+if [ -f $1 ]
 then
-    echo "swap file already exists" && exit 0
+    echo "swap file $1 already exists" && exit 0
 fi
 
-fallocate -l $1 /swapfile
-chmod 600 /swapfile
-mkswap /swapfile
-swapon /swapfile
-echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+fallocate -l $2 $1
+chmod 600 $1
+mkswap $1
+swapon $1
+echo "$1 swap swap defaults 0 0" >> /etc/fstab
