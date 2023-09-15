@@ -23,7 +23,7 @@ sudo iptables-restore -n /etc/iptables/rules.v4
 ```
 > By default iptables-restore flushes all the rules, including Docker managed ones,
 > ```-n``` argument allows to avoid that, but before making any changes to a chain it must be flushed
-> using ```-F``` key to avoid any conflicts in the rules, for example:
+> using ```-F``` key to avoid any conflicts in the rules, for example:  
 > ```-F INPUT```
 
 > To create rules for containers they must be put into DOCKER-USER chain,
