@@ -8,3 +8,5 @@ iptables-persistent
 git
 openssh-server
 rsync
+rsyslog
+curl
