@@ -1,0 +1,8 @@
+Port 8888
+Listen 0.0.0.0
+Timeout 600
+Allow 0.0.0.0
+BasicAuth user password
+Anonymous "Host"
+Anonymous "Authorization"
+Anonymous "Cookie"

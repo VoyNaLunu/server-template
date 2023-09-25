@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  tinyproxy:
+    build:
+      context: ./build
+    image: tinyproxy-dockerized:0.1
+    ports:
+      - 8888:8888
+    restart: unless-stopped
+    volumes:
+      - ./tinyproxy.conf:/app/tinyproxy.conf
+    networks:
+      - reverse-proxy-network
+
+networks:
+  reverse-proxy-network:
+    external: true
