@@ -1,9 +1,9 @@
 #!/bin/bash
 
 help=false
-size=1GB
+size=1G
 no_args=true
-number_re='^[1-9]+(KB|MB|GB|TB|PB|ZB|YB)$'
+number_re='^[1-9]+(M|G|T|P|E|Z|Y)$'
 
 
 while getopts hp:s: flag
@@ -23,7 +23,7 @@ then
     Options:
         -h      This help message
         -p      Path to the swapfile
-        -s      Size of swapfile in KB|MB|GB|TB|PB|ZB|YB, defaults to 1GB if no value provided
+        -s      Size of swapfile in M|G|T|P|E|Z|Y, defaults to 1G if no value provided
     " && exit 0
 fi
 
@@ -39,11 +39,11 @@ fi
 
 if ! [[ $size =~ $number_re ]]
 then
-    echo "Size must be a positive integer and have a size unit, example: 2GB" && exit 1
+    echo "Size must be a positive integer and have a size unit, example: 2G" && exit 1
 fi
 
 fallocate -l "${size}" $path
-chmod 600 $1path
+chmod 600 $path
 mkswap $path
 swapon $path
 echo "$path swap swap defaults 0 0" >> /etc/fstab
